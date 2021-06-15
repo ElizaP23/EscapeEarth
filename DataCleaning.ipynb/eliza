@@ -21,7 +21,7 @@
         "colab_type": "text"
       },
       "source": [
-        "<a href=\"https://colab.research.google.com/github/ElizaP23/EscapeEarth/blob/main/DataCleaning.ipynb\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+        "<a href=\"https://colab.research.google.com/github/ElizaP23/EscapeEarth/blob/main/DataCleaning.ipynb/eliza\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
       ]
     },
     {
@@ -38,7 +38,7 @@
         "\n",
         "drive.mount('/content/gdrive')"
       ],
-      "execution_count": 3,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "stream",
@@ -63,7 +63,7 @@
         "!pip install lightkurve\n",
         "import lightkurve as lk"
       ],
-      "execution_count": 4,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "stream",
@@ -206,7 +206,7 @@
         "                pass\n",
         "    return lcfs"
       ],
-      "execution_count": 5,
+      "execution_count": null,
       "outputs": []
     },
     {
@@ -229,7 +229,7 @@
         "subsample_data = open_rawdata(paths2files,sector=14) #open the lightcurvefile\n",
         "print('Initial function output data type:',type(subsample_data))"
       ],
-      "execution_count": 10,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "stream",
