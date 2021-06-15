@@ -1,0 +1,159 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "download_data.ipynb",
+      "provenance": [],
+      "authorship_tag": "ABX9TyMtd+ZeZXiGGJw3VGf8vydH",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/ElizaP23/EscapeEarth/blob/main/download_data.ipynb/eliza\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "9pLmHngD_e0j",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        },
+        "outputId": "08e367bc-b7f9-4fb8-87a2-9b0b92605346"
+      },
+      "source": [
+        "from google.colab import drive\n",
+        "drive.mount('/content/gdrive')"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Mounted at /content/gdrive\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "r8GrS3RAGQRL",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 1000
+        },
+        "outputId": "868cd2cc-1fc9-419b-86b6-9d212d8fb93d"
+      },
+      "source": [
+        "import pandas as pd\n",
+        "!pip install lightkurve\n",
+        "import lightkurve as lk"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Collecting lightkurve\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/6b/cb/a2917205537f6bad53b109365e09abe946afbf5d8a4e1f46c3f75abcb398/lightkurve-1.11.3-py3-none-any.whl (515kB)\n",
+            "\r\u001b[K     |▋                               | 10kB 18.4MB/s eta 0:00:01\r\u001b[K     |█▎                              | 20kB 6.3MB/s eta 0:00:01\r\u001b[K     |██                              | 30kB 6.9MB/s eta 0:00:01\r\u001b[K     |██▌                             | 40kB 7.8MB/s eta 0:00:01\r\u001b[K     |███▏                            | 51kB 6.6MB/s eta 0:00:01\r\u001b[K     |███▉                            | 61kB 7.1MB/s eta 0:00:01\r\u001b[K     |████▌                           | 71kB 7.7MB/s eta 0:00:01\r\u001b[K     |█████                           | 81kB 8.0MB/s eta 0:00:01\r\u001b[K     |█████▊                          | 92kB 7.6MB/s eta 0:00:01\r\u001b[K     |██████▍                         | 102kB 7.8MB/s eta 0:00:01\r\u001b[K     |███████                         | 112kB 7.8MB/s eta 0:00:01\r\u001b[K     |███████▋                        | 122kB 7.8MB/s eta 0:00:01\r\u001b[K     |████████▎                       | 133kB 7.8MB/s eta 0:00:01\r\u001b[K     |█████████                       | 143kB 7.8MB/s eta 0:00:01\r\u001b[K     |█████████▌                      | 153kB 7.8MB/s eta 0:00:01\r\u001b[K     |██████████▏                     | 163kB 7.8MB/s eta 0:00:01\r\u001b[K     |██████████▉                     | 174kB 7.8MB/s eta 0:00:01\r\u001b[K     |███████████▌                    | 184kB 7.8MB/s eta 0:00:01\r\u001b[K     |████████████                    | 194kB 7.8MB/s eta 0:00:01\r\u001b[K     |████████████▊                   | 204kB 7.8MB/s eta 0:00:01\r\u001b[K     |█████████████▍                  | 215kB 7.8MB/s eta 0:00:01\r\u001b[K     |██████████████                  | 225kB 7.8MB/s eta 0:00:01\r\u001b[K     |██████████████▋                 | 235kB 7.8MB/s eta 0:00:01\r\u001b[K     |███████████████▎                | 245kB 7.8MB/s eta 0:00:01\r\u001b[K     |████████████████                | 256kB 7.8MB/s eta 0:00:01\r\u001b[K     |████████████████▌               | 266kB 7.8MB/s eta 0:00:01\r\u001b[K     |█████████████████▏              | 276kB 7.8MB/s eta 0:00:01\r\u001b[K     |█████████████████▉              | 286kB 7.8MB/s eta 0:00:01\r\u001b[K     |██████████████████▌             | 296kB 7.8MB/s eta 0:00:01\r\u001b[K     |███████████████████             | 307kB 7.8MB/s eta 0:00:01\r\u001b[K     |███████████████████▊            | 317kB 7.8MB/s eta 0:00:01\r\u001b[K     |████████████████████▍           | 327kB 7.8MB/s eta 0:00:01\r\u001b[K     |█████████████████████           | 337kB 7.8MB/s eta 0:00:01\r\u001b[K     |█████████████████████▋          | 348kB 7.8MB/s eta 0:00:01\r\u001b[K     |██████████████████████▎         | 358kB 7.8MB/s eta 0:00:01\r\u001b[K     |███████████████████████         | 368kB 7.8MB/s eta 0:00:01\r\u001b[K     |███████████████████████▌        | 378kB 7.8MB/s eta 0:00:01\r\u001b[K     |████████████████████████▏       | 389kB 7.8MB/s eta 0:00:01\r\u001b[K     |████████████████████████▉       | 399kB 7.8MB/s eta 0:00:01\r\u001b[K     |█████████████████████████▌      | 409kB 7.8MB/s eta 0:00:01\r\u001b[K     |██████████████████████████      | 419kB 7.8MB/s eta 0:00:01\r\u001b[K     |██████████████████████████▊     | 430kB 7.8MB/s eta 0:00:01\r\u001b[K     |███████████████████████████▍    | 440kB 7.8MB/s eta 0:00:01\r\u001b[K     |████████████████████████████    | 450kB 7.8MB/s eta 0:00:01\r\u001b[K     |████████████████████████████▋   | 460kB 7.8MB/s eta 0:00:01\r\u001b[K     |█████████████████████████████▎  | 471kB 7.8MB/s eta 0:00:01\r\u001b[K     |██████████████████████████████  | 481kB 7.8MB/s eta 0:00:01\r\u001b[K     |██████████████████████████████▌ | 491kB 7.8MB/s eta 0:00:01\r\u001b[K     |███████████████████████████████▏| 501kB 7.8MB/s eta 0:00:01\r\u001b[K     |███████████████████████████████▉| 512kB 7.8MB/s eta 0:00:01\r\u001b[K     |████████████████████████████████| 522kB 7.8MB/s \n",
+            "\u001b[?25hRequirement already satisfied: numpy>=1.11 in /usr/local/lib/python3.6/dist-packages (from lightkurve) (1.18.5)\n",
+            "Collecting fbpca>=1.0\n",
+            "  Downloading https://files.pythonhosted.org/packages/a7/a5/2085d0645a4bb4f0b606251b0b7466c61326e4a471d445c1c3761a2d07bc/fbpca-1.0.tar.gz\n",
+            "Requirement already satisfied: matplotlib>=1.5.3 in /usr/local/lib/python3.6/dist-packages (from lightkurve) (3.2.2)\n",
+            "Requirement already satisfied: tqdm>=4.25.0 in /usr/local/lib/python3.6/dist-packages (from lightkurve) (4.41.1)\n",
+            "Collecting scipy!=1.4.0,!=1.4.1,>=0.19.0\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/8a/14/d0475ceeaa047f3eae2dc7597c3d40228e1d5beee42c1730f3c96ffb5526/scipy-1.5.3-cp36-cp36m-manylinux1_x86_64.whl (25.9MB)\n",
+            "\u001b[K     |████████████████████████████████| 25.9MB 68.7MB/s \n",
+            "\u001b[?25hRequirement already satisfied: patsy>=0.5.1 in /usr/local/lib/python3.6/dist-packages (from lightkurve) (0.5.1)\n",
+            "Collecting oktopus\n",
+            "  Downloading https://files.pythonhosted.org/packages/2d/6e/7b7e11442ff70286c22614d200f6145f83528dc6c99fec0982665e25c8d3/oktopus-0.1.2.tar.gz\n",
+            "Requirement already satisfied: requests in /usr/local/lib/python3.6/dist-packages (from lightkurve) (2.23.0)\n",
+            "Requirement already satisfied: pandas in /usr/local/lib/python3.6/dist-packages (from lightkurve) (1.1.3)\n",
+            "Collecting uncertainties\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/b0/e0/fc200da8190729dcb685ae4877ed6936d31d64aeccb8cc355d9ec982681d/uncertainties-3.1.4-py2.py3-none-any.whl (246kB)\n",
+            "\u001b[K     |████████████████████████████████| 256kB 54.7MB/s \n",
+            "\u001b[?25hRequirement already satisfied: bs4 in /usr/local/lib/python3.6/dist-packages (from lightkurve) (0.0.1)\n",
+            "Requirement already satisfied: astropy>=1.3 in /usr/local/lib/python3.6/dist-packages (from lightkurve) (4.1)\n",
+            "Collecting astroquery>=0.3.9\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/1b/f8/4690523783691ed816b3469c3ec611af3798594d37ade510dd918d59f57e/astroquery-0.4.1.tar.gz (6.5MB)\n",
+            "\u001b[K     |████████████████████████████████| 6.5MB 35.6MB/s \n",
+            "\u001b[?25hRequirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 in /usr/local/lib/python3.6/dist-packages (from matplotlib>=1.5.3->lightkurve) (2.4.7)\n",
+            "Requirement already satisfied: kiwisolver>=1.0.1 in /usr/local/lib/python3.6/dist-packages (from matplotlib>=1.5.3->lightkurve) (1.2.0)\n",
+            "Requirement already satisfied: cycler>=0.10 in /usr/local/lib/python3.6/dist-packages (from matplotlib>=1.5.3->lightkurve) (0.10.0)\n",
+            "Requirement already satisfied: python-dateutil>=2.1 in /usr/local/lib/python3.6/dist-packages (from matplotlib>=1.5.3->lightkurve) (2.8.1)\n",
+            "Requirement already satisfied: six in /usr/local/lib/python3.6/dist-packages (from patsy>=0.5.1->lightkurve) (1.15.0)\n",
+            "Requirement already satisfied: autograd in /usr/local/lib/python3.6/dist-packages (from oktopus->lightkurve) (1.3)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.6/dist-packages (from requests->lightkurve) (2020.6.20)\n",
+            "Requirement already satisfied: chardet<4,>=3.0.2 in /usr/local/lib/python3.6/dist-packages (from requests->lightkurve) (3.0.4)\n",
+            "Requirement already satisfied: idna<3,>=2.5 in /usr/local/lib/python3.6/dist-packages (from requests->lightkurve) (2.10)\n",
+            "Requirement already satisfied: urllib3!=1.25.0,!=1.25.1,<1.26,>=1.21.1 in /usr/local/lib/python3.6/dist-packages (from requests->lightkurve) (1.24.3)\n",
+            "Requirement already satisfied: pytz>=2017.2 in /usr/local/lib/python3.6/dist-packages (from pandas->lightkurve) (2018.9)\n",
+            "Requirement already satisfied: future in /usr/local/lib/python3.6/dist-packages (from uncertainties->lightkurve) (0.16.0)\n",
+            "Requirement already satisfied: beautifulsoup4 in /usr/local/lib/python3.6/dist-packages (from bs4->lightkurve) (4.6.3)\n",
+            "Collecting keyring>=4.0\n",
+            "  Downloading https://files.pythonhosted.org/packages/e4/ed/7be20815f248b0d6aae406783c2bee392640924623c4e17b50ca90c7f74d/keyring-21.4.0-py3-none-any.whl\n",
+            "Requirement already satisfied: html5lib>=0.999 in /usr/local/lib/python3.6/dist-packages (from astroquery>=0.3.9->lightkurve) (1.0.1)\n",
+            "Collecting SecretStorage>=3; sys_platform == \"linux\"\n",
+            "  Downloading https://files.pythonhosted.org/packages/c3/50/8a02cad020e949e6d7105f5f4530d41e3febcaa5b73f8f2148aacb3aeba5/SecretStorage-3.1.2-py3-none-any.whl\n",
+            "Collecting jeepney>=0.4.2; sys_platform == \"linux\"\n",
+            "  Downloading https://files.pythonhosted.org/packages/79/31/2e8d42727595faf224c6dbb748c32b192e212f25495fe841fb7ce8e168b8/jeepney-0.4.3-py3-none-any.whl\n",
+            "Requirement already satisfied: importlib-metadata; python_version < \"3.8\" in /usr/local/lib/python3.6/dist-packages (from keyring>=4.0->astroquery>=0.3.9->lightkurve) (2.0.0)\n",
+            "Requirement already satisfied: webencodings in /usr/local/lib/python3.6/dist-packages (from html5lib>=0.999->astroquery>=0.3.9->lightkurve) (0.5.1)\n",
+            "Collecting cryptography\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/4a/a8/904c6f56c6018fc0b860510a55ea6123d561d02157f9e0855301afa27749/cryptography-3.2-cp35-abi3-manylinux2010_x86_64.whl (2.6MB)\n",
+            "\u001b[K     |████████████████████████████████| 2.7MB 53.4MB/s \n",
+            "\u001b[?25hRequirement already satisfied: zipp>=0.5 in /usr/local/lib/python3.6/dist-packages (from importlib-metadata; python_version < \"3.8\"->keyring>=4.0->astroquery>=0.3.9->lightkurve) (3.3.1)\n",
+            "Requirement already satisfied: cffi!=1.11.3,>=1.8 in /usr/local/lib/python3.6/dist-packages (from cryptography->SecretStorage>=3; sys_platform == \"linux\"->keyring>=4.0->astroquery>=0.3.9->lightkurve) (1.14.3)\n",
+            "Requirement already satisfied: pycparser in /usr/local/lib/python3.6/dist-packages (from cffi!=1.11.3,>=1.8->cryptography->SecretStorage>=3; sys_platform == \"linux\"->keyring>=4.0->astroquery>=0.3.9->lightkurve) (2.20)\n",
+            "Building wheels for collected packages: fbpca, oktopus, astroquery\n",
+            "  Building wheel for fbpca (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for fbpca: filename=fbpca-1.0-cp36-none-any.whl size=11376 sha256=2ed9ebbadbfa15251c999d33e2a39a7f8aff629120f014dd345721e4b348d3c0\n",
+            "  Stored in directory: /root/.cache/pip/wheels/53/a2/dd/9b66cf53dbc58cec1e613d216689e5fa946d3e7805c30f60dc\n",
+            "  Building wheel for oktopus (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for oktopus: filename=oktopus-0.1.2-cp36-none-any.whl size=12781 sha256=0f23ac437219f2f9b182514f192309d8670cbf2e77b8577d5fc6d365536a3080\n",
+            "  Stored in directory: /root/.cache/pip/wheels/9b/90/81/098fc66ee56166d63c9a8fc0a9672ae7b3423396a588ec952a\n",
+            "  Building wheel for astroquery (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for astroquery: filename=astroquery-0.4.1-cp36-none-any.whl size=3831873 sha256=f6d35c376a1aede0173a2ff4c7187fed12f6d9169b3313b04983edd1305d0c2b\n",
+            "  Stored in directory: /root/.cache/pip/wheels/88/f8/b7/a254cd96e808f708bc0b7d755a8e095c56fbbe94099d7b464f\n",
+            "Successfully built fbpca oktopus astroquery\n",
+            "\u001b[31mERROR: tensorflow 2.3.0 has requirement scipy==1.4.1, but you'll have scipy 1.5.3 which is incompatible.\u001b[0m\n",
+            "\u001b[31mERROR: albumentations 0.1.12 has requirement imgaug<0.2.7,>=0.2.5, but you'll have imgaug 0.2.9 which is incompatible.\u001b[0m\n",
+            "Installing collected packages: fbpca, scipy, oktopus, uncertainties, cryptography, jeepney, SecretStorage, keyring, astroquery, lightkurve\n",
+            "  Found existing installation: scipy 1.4.1\n",
+            "    Uninstalling scipy-1.4.1:\n",
+            "      Successfully uninstalled scipy-1.4.1\n",
+            "Successfully installed SecretStorage-3.1.2 astroquery-0.4.1 cryptography-3.2 fbpca-1.0 jeepney-0.4.3 keyring-21.4.0 lightkurve-1.11.3 oktopus-0.1.2 scipy-1.5.3 uncertainties-3.1.4\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "NAOKfc_4GrVs"
+      },
+      "source": [
+        ""
+      ],
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
