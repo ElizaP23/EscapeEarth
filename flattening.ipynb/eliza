@@ -1,0 +1,524 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "flattening.ipynb",
+      "provenance": [],
+      "authorship_tag": "ABX9TyPfk3/23AYAVCrHwCqOYcR5",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/ElizaP23/EscapeEarth/blob/main/flattening.ipynb/eliza\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "uz9jU_k2z2Cd",
+        "outputId": "6766cac6-d36e-4d92-df0b-2020f0c2169c"
+      },
+      "source": [
+        "from google.colab import drive\n",
+        "drive.mount('/content/gdrive')"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Mounted at /content/gdrive\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "W4ea73yiz7Tl",
+        "outputId": "59835e39-b9b5-4d85-c1b2-8501c9b699b4"
+      },
+      "source": [
+        "!pip install lightkurve \n",
+        "import lightkurve as lk \n",
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "import matplotlib.pyplot as plt "
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Collecting lightkurve\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/6b/cb/a2917205537f6bad53b109365e09abe946afbf5d8a4e1f46c3f75abcb398/lightkurve-1.11.3-py3-none-any.whl (515kB)\n",
+            "\r\u001b[K     |▋                               | 10kB 14.1MB/s eta 0:00:01\r\u001b[K     |█▎                              | 20kB 19.6MB/s eta 0:00:01\r\u001b[K     |██                              | 30kB 17.9MB/s eta 0:00:01\r\u001b[K     |██▌                             | 40kB 15.2MB/s eta 0:00:01\r\u001b[K     |███▏                            | 51kB 10.0MB/s eta 0:00:01\r\u001b[K     |███▉                            | 61kB 9.2MB/s eta 0:00:01\r\u001b[K     |████▌                           | 71kB 10.3MB/s eta 0:00:01\r\u001b[K     |█████                           | 81kB 10.4MB/s eta 0:00:01\r\u001b[K     |█████▊                          | 92kB 10.5MB/s eta 0:00:01\r\u001b[K     |██████▍                         | 102kB 9.2MB/s eta 0:00:01\r\u001b[K     |███████                         | 112kB 9.2MB/s eta 0:00:01\r\u001b[K     |███████▋                        | 122kB 9.2MB/s eta 0:00:01\r\u001b[K     |████████▎                       | 133kB 9.2MB/s eta 0:00:01\r\u001b[K     |█████████                       | 143kB 9.2MB/s eta 0:00:01\r\u001b[K     |█████████▌                      | 153kB 9.2MB/s eta 0:00:01\r\u001b[K     |██████████▏                     | 163kB 9.2MB/s eta 0:00:01\r\u001b[K     |██████████▉                     | 174kB 9.2MB/s eta 0:00:01\r\u001b[K     |███████████▌                    | 184kB 9.2MB/s eta 0:00:01\r\u001b[K     |████████████                    | 194kB 9.2MB/s eta 0:00:01\r\u001b[K     |████████████▊                   | 204kB 9.2MB/s eta 0:00:01\r\u001b[K     |█████████████▍                  | 215kB 9.2MB/s eta 0:00:01\r\u001b[K     |██████████████                  | 225kB 9.2MB/s eta 0:00:01\r\u001b[K     |██████████████▋                 | 235kB 9.2MB/s eta 0:00:01\r\u001b[K     |███████████████▎                | 245kB 9.2MB/s eta 0:00:01\r\u001b[K     |████████████████                | 256kB 9.2MB/s eta 0:00:01\r\u001b[K     |████████████████▌               | 266kB 9.2MB/s eta 0:00:01\r\u001b[K     |█████████████████▏              | 276kB 9.2MB/s eta 0:00:01\r\u001b[K     |█████████████████▉              | 286kB 9.2MB/s eta 0:00:01\r\u001b[K     |██████████████████▌             | 296kB 9.2MB/s eta 0:00:01\r\u001b[K     |███████████████████             | 307kB 9.2MB/s eta 0:00:01\r\u001b[K     |███████████████████▊            | 317kB 9.2MB/s eta 0:00:01\r\u001b[K     |████████████████████▍           | 327kB 9.2MB/s eta 0:00:01\r\u001b[K     |█████████████████████           | 337kB 9.2MB/s eta 0:00:01\r\u001b[K     |█████████████████████▋          | 348kB 9.2MB/s eta 0:00:01\r\u001b[K     |██████████████████████▎         | 358kB 9.2MB/s eta 0:00:01\r\u001b[K     |███████████████████████         | 368kB 9.2MB/s eta 0:00:01\r\u001b[K     |███████████████████████▌        | 378kB 9.2MB/s eta 0:00:01\r\u001b[K     |████████████████████████▏       | 389kB 9.2MB/s eta 0:00:01\r\u001b[K     |████████████████████████▉       | 399kB 9.2MB/s eta 0:00:01\r\u001b[K     |█████████████████████████▌      | 409kB 9.2MB/s eta 0:00:01\r\u001b[K     |██████████████████████████      | 419kB 9.2MB/s eta 0:00:01\r\u001b[K     |██████████████████████████▊     | 430kB 9.2MB/s eta 0:00:01\r\u001b[K     |███████████████████████████▍    | 440kB 9.2MB/s eta 0:00:01\r\u001b[K     |████████████████████████████    | 450kB 9.2MB/s eta 0:00:01\r\u001b[K     |████████████████████████████▋   | 460kB 9.2MB/s eta 0:00:01\r\u001b[K     |█████████████████████████████▎  | 471kB 9.2MB/s eta 0:00:01\r\u001b[K     |██████████████████████████████  | 481kB 9.2MB/s eta 0:00:01\r\u001b[K     |██████████████████████████████▌ | 491kB 9.2MB/s eta 0:00:01\r\u001b[K     |███████████████████████████████▏| 501kB 9.2MB/s eta 0:00:01\r\u001b[K     |███████████████████████████████▉| 512kB 9.2MB/s eta 0:00:01\r\u001b[K     |████████████████████████████████| 522kB 9.2MB/s \n",
+            "\u001b[?25hRequirement already satisfied: tqdm>=4.25.0 in /usr/local/lib/python3.6/dist-packages (from lightkurve) (4.41.1)\n",
+            "Requirement already satisfied: pandas in /usr/local/lib/python3.6/dist-packages (from lightkurve) (1.1.5)\n",
+            "Collecting scipy!=1.4.0,!=1.4.1,>=0.19.0\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/c8/89/63171228d5ced148f5ced50305c89e8576ffc695a90b58fe5bb602b910c2/scipy-1.5.4-cp36-cp36m-manylinux1_x86_64.whl (25.9MB)\n",
+            "\u001b[K     |████████████████████████████████| 25.9MB 1.7MB/s \n",
+            "\u001b[?25hRequirement already satisfied: patsy>=0.5.1 in /usr/local/lib/python3.6/dist-packages (from lightkurve) (0.5.1)\n",
+            "Collecting oktopus\n",
+            "  Downloading https://files.pythonhosted.org/packages/2d/6e/7b7e11442ff70286c22614d200f6145f83528dc6c99fec0982665e25c8d3/oktopus-0.1.2.tar.gz\n",
+            "Collecting fbpca>=1.0\n",
+            "  Downloading https://files.pythonhosted.org/packages/a7/a5/2085d0645a4bb4f0b606251b0b7466c61326e4a471d445c1c3761a2d07bc/fbpca-1.0.tar.gz\n",
+            "Requirement already satisfied: requests in /usr/local/lib/python3.6/dist-packages (from lightkurve) (2.23.0)\n",
+            "Requirement already satisfied: bs4 in /usr/local/lib/python3.6/dist-packages (from lightkurve) (0.0.1)\n",
+            "Collecting uncertainties\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/45/41/fc7e7b73b603e7c2c9e040b7aa8caf4a88d74b6faa567601ed82b6f0d8e1/uncertainties-3.1.5-py2.py3-none-any.whl (246kB)\n",
+            "\u001b[K     |████████████████████████████████| 256kB 45.4MB/s \n",
+            "\u001b[?25hRequirement already satisfied: astropy>=1.3 in /usr/local/lib/python3.6/dist-packages (from lightkurve) (4.1)\n",
+            "Collecting astroquery>=0.3.9\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/1b/f8/4690523783691ed816b3469c3ec611af3798594d37ade510dd918d59f57e/astroquery-0.4.1.tar.gz (6.5MB)\n",
+            "\u001b[K     |████████████████████████████████| 6.5MB 10.7MB/s \n",
+            "\u001b[?25hRequirement already satisfied: matplotlib>=1.5.3 in /usr/local/lib/python3.6/dist-packages (from lightkurve) (3.2.2)\n",
+            "Requirement already satisfied: numpy>=1.11 in /usr/local/lib/python3.6/dist-packages (from lightkurve) (1.19.5)\n",
+            "Requirement already satisfied: pytz>=2017.2 in /usr/local/lib/python3.6/dist-packages (from pandas->lightkurve) (2018.9)\n",
+            "Requirement already satisfied: python-dateutil>=2.7.3 in /usr/local/lib/python3.6/dist-packages (from pandas->lightkurve) (2.8.1)\n",
+            "Requirement already satisfied: six in /usr/local/lib/python3.6/dist-packages (from patsy>=0.5.1->lightkurve) (1.15.0)\n",
+            "Requirement already satisfied: autograd in /usr/local/lib/python3.6/dist-packages (from oktopus->lightkurve) (1.3)\n",
+            "Requirement already satisfied: chardet<4,>=3.0.2 in /usr/local/lib/python3.6/dist-packages (from requests->lightkurve) (3.0.4)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.6/dist-packages (from requests->lightkurve) (2020.12.5)\n",
+            "Requirement already satisfied: urllib3!=1.25.0,!=1.25.1,<1.26,>=1.21.1 in /usr/local/lib/python3.6/dist-packages (from requests->lightkurve) (1.24.3)\n",
+            "Requirement already satisfied: idna<3,>=2.5 in /usr/local/lib/python3.6/dist-packages (from requests->lightkurve) (2.10)\n",
+            "Requirement already satisfied: beautifulsoup4 in /usr/local/lib/python3.6/dist-packages (from bs4->lightkurve) (4.6.3)\n",
+            "Requirement already satisfied: future in /usr/local/lib/python3.6/dist-packages (from uncertainties->lightkurve) (0.16.0)\n",
+            "Collecting keyring>=4.0\n",
+            "  Downloading https://files.pythonhosted.org/packages/96/17/86e1e5b50dc14e5984a661dde2ed3b7f05efe1fdee32145a77708cf06904/keyring-22.0.1-py3-none-any.whl\n",
+            "Requirement already satisfied: html5lib>=0.999 in /usr/local/lib/python3.6/dist-packages (from astroquery>=0.3.9->lightkurve) (1.0.1)\n",
+            "Requirement already satisfied: kiwisolver>=1.0.1 in /usr/local/lib/python3.6/dist-packages (from matplotlib>=1.5.3->lightkurve) (1.3.1)\n",
+            "Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 in /usr/local/lib/python3.6/dist-packages (from matplotlib>=1.5.3->lightkurve) (2.4.7)\n",
+            "Requirement already satisfied: cycler>=0.10 in /usr/local/lib/python3.6/dist-packages (from matplotlib>=1.5.3->lightkurve) (0.10.0)\n",
+            "Collecting jeepney>=0.4.2; sys_platform == \"linux\"\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/51/b0/a6ea72741aaac3f37fb96d195e4ee576a103c4c04e279bc6b446a70960e1/jeepney-0.6.0-py3-none-any.whl (45kB)\n",
+            "\u001b[K     |████████████████████████████████| 51kB 6.2MB/s \n",
+            "\u001b[?25hCollecting SecretStorage>=3.2; sys_platform == \"linux\"\n",
+            "  Downloading https://files.pythonhosted.org/packages/63/a2/a6d9099b14eb5dbbb04fb722d2b5322688f8f99b471bdf2097e33efa8091/SecretStorage-3.3.0-py3-none-any.whl\n",
+            "Requirement already satisfied: importlib-metadata>=1; python_version < \"3.8\" in /usr/local/lib/python3.6/dist-packages (from keyring>=4.0->astroquery>=0.3.9->lightkurve) (3.3.0)\n",
+            "Requirement already satisfied: webencodings in /usr/local/lib/python3.6/dist-packages (from html5lib>=0.999->astroquery>=0.3.9->lightkurve) (0.5.1)\n",
+            "Collecting cryptography>=2.0\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/c9/de/7054df0620b5411ba45480f0261e1fb66a53f3db31b28e3aa52c026e72d9/cryptography-3.3.1-cp36-abi3-manylinux2010_x86_64.whl (2.6MB)\n",
+            "\u001b[K     |████████████████████████████████| 2.6MB 49.2MB/s \n",
+            "\u001b[?25hRequirement already satisfied: typing-extensions>=3.6.4; python_version < \"3.8\" in /usr/local/lib/python3.6/dist-packages (from importlib-metadata>=1; python_version < \"3.8\"->keyring>=4.0->astroquery>=0.3.9->lightkurve) (3.7.4.3)\n",
+            "Requirement already satisfied: zipp>=0.5 in /usr/local/lib/python3.6/dist-packages (from importlib-metadata>=1; python_version < \"3.8\"->keyring>=4.0->astroquery>=0.3.9->lightkurve) (3.4.0)\n",
+            "Requirement already satisfied: cffi>=1.12 in /usr/local/lib/python3.6/dist-packages (from cryptography>=2.0->SecretStorage>=3.2; sys_platform == \"linux\"->keyring>=4.0->astroquery>=0.3.9->lightkurve) (1.14.4)\n",
+            "Requirement already satisfied: pycparser in /usr/local/lib/python3.6/dist-packages (from cffi>=1.12->cryptography>=2.0->SecretStorage>=3.2; sys_platform == \"linux\"->keyring>=4.0->astroquery>=0.3.9->lightkurve) (2.20)\n",
+            "Building wheels for collected packages: oktopus, fbpca, astroquery\n",
+            "  Building wheel for oktopus (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for oktopus: filename=oktopus-0.1.2-cp36-none-any.whl size=12779 sha256=1d22f70859440ff51e50d068a0468e00410539ef4e1a380c5026eb10bbd7bf17\n",
+            "  Stored in directory: /root/.cache/pip/wheels/9b/90/81/098fc66ee56166d63c9a8fc0a9672ae7b3423396a588ec952a\n",
+            "  Building wheel for fbpca (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for fbpca: filename=fbpca-1.0-cp36-none-any.whl size=11377 sha256=5a67513a5ff4ef48d9d2c103c52d3b92e0450e3d2d0c2e9090a5162455954f47\n",
+            "  Stored in directory: /root/.cache/pip/wheels/53/a2/dd/9b66cf53dbc58cec1e613d216689e5fa946d3e7805c30f60dc\n",
+            "  Building wheel for astroquery (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for astroquery: filename=astroquery-0.4.1-cp36-none-any.whl size=3831873 sha256=abc47abfdc2ad0bcd05d1eddc2d3449d491419d8dbff2747d055ac1869493e89\n",
+            "  Stored in directory: /root/.cache/pip/wheels/88/f8/b7/a254cd96e808f708bc0b7d755a8e095c56fbbe94099d7b464f\n",
+            "Successfully built oktopus fbpca astroquery\n",
+            "\u001b[31mERROR: albumentations 0.1.12 has requirement imgaug<0.2.7,>=0.2.5, but you'll have imgaug 0.2.9 which is incompatible.\u001b[0m\n",
+            "Installing collected packages: scipy, oktopus, fbpca, uncertainties, jeepney, cryptography, SecretStorage, keyring, astroquery, lightkurve\n",
+            "  Found existing installation: scipy 1.4.1\n",
+            "    Uninstalling scipy-1.4.1:\n",
+            "      Successfully uninstalled scipy-1.4.1\n",
+            "Successfully installed SecretStorage-3.3.0 astroquery-0.4.1 cryptography-3.3.1 fbpca-1.0 jeepney-0.6.0 keyring-22.0.1 lightkurve-1.11.3 oktopus-0.1.2 scipy-1.5.4 uncertainties-3.1.5\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "4EkuQaaa0fLX"
+      },
+      "source": [
+        "import astropy.units as u\n",
+        "from astropy.timeseries import BoxLeastSquares\n",
+        "np.random.seed(42)\n",
+        "t = np.random.uniform(0, 20, 2000)\n",
+        "y = np.ones_like(t) - 0.1*((t%3)<0.2) + 0.01*np.random.randn(len(t))\n",
+        "model = BoxLeastSquares(t * u.day, y, dy=0.01)\n",
+        "periodogram = model.autopower(0.2)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 282
+        },
+        "id": "qyyWYgN90t5k",
+        "outputId": "c71df517-8cc6-4be8-c353-b9f1d7f377be"
+      },
+      "source": [
+        "                 plt.plot(periodogram.period, periodogram.power)  "
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "[<matplotlib.lines.Line2D at 0x7f7cac4cde48>]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 5
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "image/png": "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\n",
+            "text/plain": [
+              "<Figure size 432x288 with 1 Axes>"
+            ]
+          },
+          "metadata": {
+            "tags": [],
+            "needs_background": "light"
+          }
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "Hy5-ULr-03GS"
+      },
+      "source": [
+        "model = BoxLeastSquares(t * u.day, y, dy=0.01)\n",
+        "periods = np.linspace(2.5, 3.5, 1000) * u.day\n",
+        "periodogram = model.power(periods, 0.2)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "R82xaXcl1Ack"
+      },
+      "source": [
+        "model = BoxLeastSquares(t * u.day, y, dy=0.01)\n",
+        "periods = np.linspace(0.5, 10.5, 15) * u.day\n",
+        "periodogram = model.power(periods, 0.2)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "mIjUoRqZ1HDg"
+      },
+      "source": [
+        "model = BoxLeastSquares(t * u.day, y, dy=0.01)\n",
+        "periodogram = model.autopower(0.2)\n",
+        "max_power = np.argmax(periodogram.power)\n",
+        "stats = model.compute_stats(periodogram.period[max_power],\n",
+        "                            periodogram.duration[max_power],\n",
+        "                            periodogram.transit_time[max_power])"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 198
+        },
+        "id": "QUjXq_br1T6V",
+        "outputId": "ff9a67a0-a61c-4b79-b5ad-e7585bac0a37"
+      },
+      "source": [
+        "target_id= 7582633\n",
+        "target_sector = 14\n",
+        "first_data = [target_id, target_sector]\n",
+        "first_target = op.OpenAndPlot(first_data)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "NameError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-13-698128368d84>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      2\u001b[0m \u001b[0mtarget_sector\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;36m14\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      3\u001b[0m \u001b[0mfirst_data\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m[\u001b[0m\u001b[0mtarget_id\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtarget_sector\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 4\u001b[0;31m \u001b[0mfirst_target\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mop\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mOpenAndPlot\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfirst_data\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m: name 'op' is not defined"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 164
+        },
+        "id": "0mE-N-YZ-4Co",
+        "outputId": "4a4be146-ed62-4d03-a93c-512a054a38e9"
+      },
+      "source": [
+        "first_target.targetid, first_target.sector, first_target.telescope"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "NameError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-10-26e79a9feaba>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0mfirst_target\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtargetid\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mfirst_target\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0msector\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mfirst_target\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtelescope\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m: name 'first_target' is not defined"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 181
+        },
+        "id": "K-Dav0vL_cJI",
+        "outputId": "b8064a08-5a61-4c1e-e12c-94749eef0f35"
+      },
+      "source": [
+        "lc=first_target.open_clean_lc()\n",
+        "lc"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "NameError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-14-c1bbc5a1a2e6>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0mlc\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mfirst_target\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mopen_clean_lc\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      2\u001b[0m \u001b[0mlc\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mNameError\u001b[0m: name 'first_target' is not defined"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 164
+        },
+        "id": "Qi7iGiMp_u47",
+        "outputId": "cc252355-7a11-441b-a433-e4a9251ff5d9"
+      },
+      "source": [
+        "lc.scatter(), lc.flux"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "NameError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-15-9bf2a042893c>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0mlc\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mscatter\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mlc\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mflux\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m: name 'lc' is not defined"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 164
+        },
+        "id": "KEnmbqc3_zYw",
+        "outputId": "b8100c25-c8b9-4d99-8b41-46b9bae5a654"
+      },
+      "source": [
+        "flatdata = lc.flatten()"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "NameError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-16-9a7c9cde1b81>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0mflatdata\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mlc\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mflatten\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m: name 'lc' is not defined"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 164
+        },
+        "id": "_dEd4zBv_3OG",
+        "outputId": "9f18d3bd-5e3a-4e9f-ceda-4b01d9bb96b9"
+      },
+      "source": [
+        "flatdata.flux"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "NameError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-17-b378bbc2d162>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0mflatdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mflux\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m: name 'flatdata' is not defined"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 164
+        },
+        "id": "G74FSq3l_4y5",
+        "outputId": "8a69fa4d-715d-4c1c-9e62-79423f43d259"
+      },
+      "source": [
+        "flatdata.time"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "NameError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-18-6c9ff12c79d6>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0mflatdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtime\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m: name 'flatdata' is not defined"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 164
+        },
+        "id": "i92BV7yjAA_l",
+        "outputId": "30fdee1c-9034-4b5e-c27a-e8ac2c65336d"
+      },
+      "source": [
+        "flattime = flatdata.time - flatdata.time[0]"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "NameError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-20-201178ac0b51>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0mflattime\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mflatdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtime\u001b[0m \u001b[0;34m-\u001b[0m \u001b[0mflatdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtime\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;36m0\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m: name 'flatdata' is not defined"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 164
+        },
+        "id": "mDn5ig-KAFNd",
+        "outputId": "2088d44a-0c61-411d-a5c9-c032dc74f4ec"
+      },
+      "source": [
+        "flattime"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "NameError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-21-b5580927d99c>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0mflattime\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m: name 'flattime' is not defined"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "eupPtOG0APOM"
+      },
+      "source": [
+        "def flatten(lc):\n",
+        "  ... \n",
+        "inputs: cleaned lightkurve data\n",
+        "outputs: flattened time and flux data\n",
+        "function: takes in lighkurve data and flattens the flux and time  \n",
+        "...\n",
+        "flatdata = lc.flatten()\n",
+        "flatdata.time"
+      ],
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
